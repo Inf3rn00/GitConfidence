@@ -1,0 +1,5 @@
+{
+  "name": "DevSkill MVP",
+  "description": "A Notion-style coding assessment platform with an automated scoring engine that analyzes performance by category.",
+  "requestFramePermissions": []
+}
