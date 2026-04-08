@@ -36,7 +36,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ onBack }) => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center p-8 selection:bg-accent selection:text-white">
-      <div className="max-w-xl w-full grid grid-cols-1 gap-px bg-zinc-200 dark:border-zinc-800 border border-zinc-200 dark:border-zinc-800">
+      <div className="max-w-xl w-full grid grid-cols-1 gap-px bg-zinc-200 border border-zinc-200 dark:border-zinc-800">
         <div className="bg-white dark:bg-black p-8 border-b border-zinc-200 dark:border-zinc-800 flex justify-between items-center">
            <div className="flex items-center gap-3">
              <Terminal size={14} className="text-accent" />

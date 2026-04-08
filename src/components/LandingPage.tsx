@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from './ui/Button';
-import { Domain, SkillLevel } from '../types';
+import { Domain, SkillLevel } from '../../types';
 import { ArrowRight, ChevronDown, Check, Info } from 'lucide-react';
 
 interface LandingPageProps {
