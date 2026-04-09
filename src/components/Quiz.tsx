@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Question } from '../../types';
+import { Question } from '../types';
 import { Button } from './ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Clock, X, ChevronRight } from 'lucide-react';

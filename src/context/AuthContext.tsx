@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, Domain, SkillLevel, TestAttempt, CharacterClass, CharacterStats } from '../../types';
+import { User, Domain, SkillLevel, TestAttempt, CharacterClass, CharacterStats } from '../types';
 
 interface AuthContextType {
   user: User | null;

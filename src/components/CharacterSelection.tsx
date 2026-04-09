@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from './ui/Button';
 import { Card } from './ui/Card';
-import { CharacterClass } from '../../types';
+import { CharacterClass } from '../types';
 import { Hammer, Zap, Wand2, Axe, CircleDot, BookOpen } from 'lucide-react';
 
 const CHARACTERS: { id: CharacterClass; name: string; icon: any; domain: string; desc: string; stats: string }[] = [

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { QuizResult } from '../../types';
+import { QuizResult } from '../types';
 import { Card } from './ui/Card';
 import { Button } from './ui/Button';
 import { motion } from 'framer-motion';
