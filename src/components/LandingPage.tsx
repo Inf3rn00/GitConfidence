@@ -22,11 +22,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
         <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12">
           <div className="lg:col-span-7 p-8 lg:p-20 border-r border-zinc-200 dark:border-zinc-800 flex flex-col justify-between min-h-[70vh]">
             <div>
-              <div className="flex items-center gap-2 mb-12 text-[11px] font-mono font-bold uppercase tracking-[0.25em] text-accent">
-                <span className="w-2 h-2 bg-accent inline-block"></span>
-                DevSkill Diagnostics v1.0.4
-              </div>
-              <h1 className="text-6xl lg:text-9xl font-bold tracking-tighter leading-[0.85] mb-8 uppercase">
+              <h1 className="text-6xl lg:text-8xl font-bold tracking-tighter leading-none mb-8 uppercase">
                 Imposter<br/>Syndrome<br/><span className="text-zinc-300 dark:text-zinc-700">is a data</span><br/>Problem.
               </h1>
             </div>
@@ -120,14 +116,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
             <h2 className="text-4xl font-bold tracking-tighter uppercase mb-12">Strategic Applications</h2>
             <div className="space-y-12">
               <div className="flex gap-8 max-w-lg">
-                <div className="flex-shrink-0 w-10 h-10 bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-mono font-bold text-sm italic">A</div>
+                <div className="shrink-0 w-10 h-10 bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-mono font-bold text-sm italic">A</div>
                 <div className="space-y-3">
                   <h4 className="font-bold uppercase text-base tracking-tight">Individual Contributors</h4>
                   <p className="text-[15px] text-zinc-600 dark:text-zinc-400 leading-relaxed prose-readable">Benchmark your skills against global industry standards to eliminate internal doubt and map a precise growth trajectory.</p>
                 </div>
               </div>
               <div className="flex gap-8 max-w-lg">
-                <div className="flex-shrink-0 w-10 h-10 bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-mono font-bold text-sm italic">B</div>
+                <div className="shrink-0 w-10 h-10 bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-mono font-bold text-sm italic">B</div>
                 <div className="space-y-3">
                   <h4 className="font-bold uppercase text-base tracking-tight">Engineering Leads</h4>
                   <p className="text-[15px] text-zinc-600 dark:text-zinc-400 leading-relaxed prose-readable">Standardize technical assessments for your team without the interference of biased interviewing or inconsistent metrics.</p>

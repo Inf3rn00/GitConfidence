@@ -143,7 +143,7 @@ export const Results: React.FC<ResultsProps> = ({ result, isPro, onReturn, onUpg
 
       {/* Paystack Mock Modal */}
       {showPaystack && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-8">
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/95 backdrop-blur-sm p-8">
            <div className="max-w-md w-full border border-zinc-800 bg-black p-12 space-y-12 text-center">
               <div className="space-y-4">
                  <Lock className="mx-auto text-accent" size={32} />

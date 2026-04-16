@@ -128,7 +128,7 @@ export const Quiz: React.FC<QuizProps> = ({ questions, onSubmit, onExit }) => {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 gap-px bg-zinc-200 dark:border-zinc-800 border border-zinc-200 dark:border-zinc-800">
+              <div className="grid grid-cols-1 gap-px bg-zinc-200 border border-zinc-200 dark:border-zinc-800">
                 {currentQ.options.map((option, idx) => (
                   <button
                     key={option.id}
