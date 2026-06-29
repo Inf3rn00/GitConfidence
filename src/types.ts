@@ -16,7 +16,7 @@ export interface InventoryItem {
   name: string;
   cost: number;
   effect: string;
-  statBonus?: Partial<CharacterStats>;
+  bonus?: Partial<CharacterStats>;
 }
 
 export interface User {

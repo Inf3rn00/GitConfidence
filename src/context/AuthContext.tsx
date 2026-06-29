@@ -4,13 +4,6 @@ import { User, Domain, SkillLevel, TestAttempt, CharacterClass, CharacterStats }
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
-  register: (data: { fullName: string; email: string; domain: Domain; level: SkillLevel }) => void;
-  completeOnboarding: (data: {
-    characterClass: CharacterClass;
-    avatarName: string;
-    biggestFear: string;
-    goalToBuild: string;
-  }) => void;
   createUser: (data: {
     fullName: string;
     email: string;
@@ -47,48 +40,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     setIsLoading(false);
   }, []);
-
-  const register = (data: { fullName: string; email: string; domain: Domain; level: SkillLevel }) => {
-    const baseUser: any = {
-      id: Math.random().toString(36).substr(2, 9),
-      fullName: data.fullName,
-      email: data.email,
-      domain: data.domain,
-      skillLevel: data.level,
-      level: 1,
-      isPro: false,
-      bestScore: 0,
-      totalTests: 0,
-      testHistory: [],
-      xp: 0,
-      gold: 10,
-      avatarName: '',
-      biggestFear: '',
-      goalToBuild: '',
-    };
-    setUser(baseUser);
-    localStorage.setItem('gitconfidence_user', JSON.stringify(baseUser));
-  };
-
-  const completeOnboarding = (data: {
-    characterClass: CharacterClass;
-    avatarName: string;
-    biggestFear: string;
-    goalToBuild: string;
-  }) => {
-    if (!user) return;
-    const updatedUser = {
-      ...user,
-      avatarName: data.avatarName,
-      characterClass: data.characterClass,
-      biggestFear: data.biggestFear,
-      goalToBuild: data.goalToBuild,
-      stats: INITIAL_STATS[data.characterClass],
-      inventory: [],
-    };
-    setUser(updatedUser);
-    localStorage.setItem('gitconfidence_user', JSON.stringify(updatedUser));
-  };
 
   const createUser = (data: {
     fullName: string;
@@ -212,8 +163,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         user,
         isLoading,
-        register,
-        completeOnboarding,
         createUser,
         updateUser,
         addTestResult,

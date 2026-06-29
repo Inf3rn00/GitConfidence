@@ -3,22 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { Domain, SkillLevel, CharacterClass } from '../types';
-import { Palette, Binary, BugPlay, ArrowRight, ArrowLeft, Sparkles, Cpu } from 'lucide-react';
-
-const CLASSES: { id: CharacterClass; name: string; icon: any; tagline: string; stats: string }[] = [
-  { id: 'UIWarrior', name: 'UI Warrior', icon: Palette, tagline: 'Pixel-perfect. Animation-obsessed. UX-driven.', stats: 'STR 50 | INT 40 | DEX 80' },
-  { id: 'LogicMage', name: 'Logic Mage', icon: Binary, tagline: 'Architecture-first. State-minded. Pattern-seeker.', stats: 'STR 40 | INT 90 | DEX 40' },
-  { id: 'Debugger', name: 'Debugger', icon: BugPlay, tagline: 'Edge-case hunter. Performance analyst. Tool builder.', stats: 'STR 80 | INT 50 | DEX 50' },
-];
-
-const FEARS = [
-  'Breaking production',
-  'Not knowing enough',
-  'Being too slow',
-  'Not belonging',
-];
-
-const STEP_LABELS = ['IDENTITY', 'AVATAR', 'SCANNER'];
+import { ArrowRight, ArrowLeft, Sparkles, Cpu } from 'lucide-react';
+import { Icon } from '../utils/icons';
+import { FEARS, STEP_LABELS, ONBOARDING_CLASSES } from '../data/site';
 
 const stepVariants = {
   enter: { opacity: 0, x: 40 },
@@ -78,7 +65,6 @@ export const OnboardingFlow: React.FC = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex items-center justify-center p-8">
       <div className="max-w-2xl w-full">
-        {/* STEP INDICATOR */}
         <div className="flex items-center gap-4 mb-12">
           {STEP_LABELS.map((label, i) => (
             <div key={i} className="flex items-center gap-4 flex-1 last:flex-none">
@@ -213,7 +199,7 @@ export const OnboardingFlow: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-zinc-200 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800">
-                  {CLASSES.map((cls) => (
+                  {ONBOARDING_CLASSES.map((cls) => (
                     <button
                       key={cls.id}
                       onClick={() => setForm({ ...form, characterClass: cls.id })}
@@ -223,7 +209,8 @@ export const OnboardingFlow: React.FC = () => {
                           : ''
                       }`}
                     >
-                      <cls.icon
+                      <Icon
+                        name={cls.icon}
                         size={24}
                         className={`mb-4 transition-transform group-hover:scale-110 ${
                           form.characterClass === cls.id ? 'text-accent' : 'text-zinc-400'
@@ -308,7 +295,6 @@ export const OnboardingFlow: React.FC = () => {
           </motion.div>
         </AnimatePresence>
 
-        {/* NAVIGATION */}
         <div className="flex justify-between items-center mt-12">
           <button
             onClick={step === 0 ? () => navigate('/') : goBack}

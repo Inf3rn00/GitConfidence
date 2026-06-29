@@ -32,15 +32,29 @@ const AppContent: React.FC = () => {
       return answers[q.id] === q.correctOptionId ? acc + 1 : acc;
     }, 0);
 
+    const categoryMap: Record<string, { correct: number; total: number }> = {};
+    questions.forEach((q) => {
+      if (!categoryMap[q.category]) {
+        categoryMap[q.category] = { correct: 0, total: 0 };
+      }
+      categoryMap[q.category].total += 1;
+      if (answers[q.id] === q.correctOptionId) {
+        categoryMap[q.category].correct += 1;
+      }
+    });
+
+    const calcPct = (key: string) =>
+      Math.round(((categoryMap[key]?.correct || 0) / (categoryMap[key]?.total || 1)) * 100);
+
     const result: QuizResult = {
       score,
       total: questions.length,
       stats: {
-        algorithms: 70 + Math.floor(Math.random() * 30),
-        react: 60 + Math.floor(Math.random() * 40),
-        async: 40 + Math.floor(Math.random() * 60),
-        apis: 80 + Math.floor(Math.random() * 20),
-        testing: 50 + Math.floor(Math.random() * 50),
+        algorithms: calcPct('algorithms'),
+        react: calcPct('react'),
+        async: calcPct('async'),
+        apis: calcPct('apis'),
+        testing: calcPct('testing'),
       },
     };
 
@@ -60,8 +74,7 @@ const AppContent: React.FC = () => {
       <Route
         path="/onboarding"
         element={
-          !user ? <Navigate to="/" replace /> :
-          user.characterClass ? <Navigate to="/dashboard" replace /> :
+          user?.characterClass ? <Navigate to="/dashboard" replace /> :
           <OnboardingFlow />
         }
       />
