@@ -32,14 +32,14 @@ export const FinalCTA: React.FC = () => {
 
       <footer className="border-t border-zinc-800 p-8 lg:p-12">
         <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="font-mono font-bold text-base italic tracking-tighter">▓ GitConfidence ▓</div>
+          <div className="font-mono font-bold text-base italic tracking-tighter"> GitConfidence </div>
           <div className="flex gap-12 font-mono text-[11px] font-bold uppercase text-zinc-500 tracking-[0.15em]">
             <a href="#" className="hover:text-black dark:hover:text-white transition-colors">DOCS</a>
             <a href="#" className="hover:text-black dark:hover:text-white transition-colors">STATUS</a>
             <a href="#" className="hover:text-black dark:hover:text-white transition-colors">PRIVACY</a>
           </div>
           <div className="font-mono text-[11px] text-zinc-400 font-medium">
-            &copy; 2024 GitConfidence. Confidence through evidence.
+            &copy; {new Date().getFullYear()} GitConfidence. Confidence through evidence.
           </div>
         </div>
       </footer>

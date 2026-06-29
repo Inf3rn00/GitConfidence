@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Button } from './ui/Button';
 import { 
-  Activity, 
-  Terminal, 
-  Plus, 
-  Shield,
-  ExternalLink,
-  Coins,
+  Home,
+  Target,
   TrendingUp,
-  Package,
-  ShoppingCart,
-  Palette, Binary, BugPlay
+  Award,
+  Settings,
+  Flame,
+  Sparkles,
+  Trophy,
+  Lightbulb,
+  ArrowRight,
+  Palette, 
+  Binary, 
+  BugPlay
 } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { SHOP_ITEMS } from '../data/shop';
 
 const CLASS_ICONS: Record<string, any> = {
   UIWarrior: Palette,
@@ -27,72 +28,93 @@ interface DashboardProps {
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({ onStartAssessment }) => {
-  const { user, logout, upgradePro, purchaseItem } = useAuth();
-  const [showShop, setShowShop] = useState(false);
+  const { user, logout } = useAuth();
+  const [activeNav, setActiveNav] = useState('overview');
 
   if (!user) return null;
 
   const xpProgress = (user.xp / 1000) * 100;
-  const CharIcon = CLASS_ICONS[user.characterClass] || Terminal;
-
-  const handlePurchase = (item: typeof SHOP_ITEMS[0]) => {
-    if (purchaseItem(item.id, item.cost, item.bonus)) {
-      alert(`Acquired ${item.name}!`);
-    } else {
-      alert("Insufficient funds.");
-    }
-  };
+  const CharIcon = CLASS_ICONS[user.characterClass] || Palette;
+  
+  // Mock data for dashboard features
+  const streakDays = 7;
+  const weeklyLeaders = [
+    { name: 'Alex Chen', xp: 2450 },
+    { name: 'Sam Rivera', xp: 2180 },
+    { name: user.fullName, xp: user.xp },
+  ];
+  
+  const dailyTip = "Remember: Every senior developer was once a beginner. Your pace is valid.";
+  const recentActivities = user.testHistory.slice(-3).reverse();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white font-sans selection:bg-accent">
-      <nav className="h-16 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-8 sticky top-0 bg-white/80 dark:bg-black/80 backdrop-blur-md z-50">
+    <div className="min-h-screen bg-black text-white font-sans selection:bg-accent selection:text-white">
+      
+      {/* TOP NAVBAR */}
+      <nav className="h-16 border-b border-zinc-800 flex items-center justify-between px-8 sticky top-0 bg-black/90 backdrop-blur z-50">
         <div className="flex items-center gap-8">
-          <div className="font-mono font-bold text-base italic tracking-tighter">GITCONFIDENCE // HUB</div>
-          <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800"></div>
-          <div className="flex gap-10 font-mono text-[11px] uppercase font-bold text-zinc-400 tracking-[0.2em]">
-            <button className={`${!showShop ? 'text-black dark:text-white' : 'hover:text-black dark:hover:text-white transition-colors'}`} onClick={() => setShowShop(false)}>Overview</button>
-            <button className={`${showShop ? 'text-black dark:text-white' : 'hover:text-black dark:hover:text-white transition-colors'}`} onClick={() => setShowShop(true)}>Store_Inventory</button>
+          <div className="font-mono font-bold text-sm italic tracking-tighter">GitConfidence</div>
+          <div className="h-4 w-px bg-zinc-800"></div>
+          <div className="flex gap-10 font-mono text-[11px] uppercase font-bold text-zinc-500 tracking-[0.15em]">
+            <button 
+              className={`${activeNav === 'overview' ? 'text-white' : 'hover:text-white transition-colors'}`}
+              onClick={() => setActiveNav('overview')}
+            >
+              Overview
+            </button>
+            <button 
+              className={`${activeNav === 'progress' ? 'text-white' : 'hover:text-white transition-colors'}`}
+              onClick={() => setActiveNav('progress')}
+            >
+              Progress
+            </button>
           </div>
         </div>
-        <div className="flex items-center gap-10">
-           <div className="flex items-center gap-2 font-mono text-[12px] font-bold text-accent tracking-widest">
-              <Coins size={16} />
-              <span>{user.gold} GOLD</span>
-           </div>
-           <Button variant="ghost" size="sm" onClick={logout}>Sign_Out</Button>
-        </div>
+        <Button variant="ghost" size="sm" onClick={logout}>Sign_Out</Button>
       </nav>
 
       <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 min-h-[calc(100vh-64px)]">
         
-        {/* CHARACTER PROFILE */}
-        <aside className="lg:col-span-3 border-r border-zinc-200 dark:border-zinc-800 p-12 space-y-12 bg-zinc-50/20 dark:bg-zinc-900/10">
+        {/* LEFT SIDEBAR */}
+        <aside className="lg:col-span-3 border-r border-zinc-800 p-12 space-y-12 bg-zinc-900/10">
           <div className="space-y-10">
-            <div className="w-32 h-32 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center relative shadow-sm">
-              <CharIcon size={64} className="text-accent" />
-              <div className="absolute -bottom-2 -right-2 bg-black dark:bg-white text-white dark:text-black font-mono text-[12px] font-bold px-2.5 py-1.5 border border-zinc-200 dark:border-zinc-800">
+            {/* Character Avatar */}
+            <div className="w-32 h-32 bg-zinc-900 border border-zinc-800 flex items-center justify-center relative">
+              <CharIcon size={64} className="text-white" strokeWidth={1.5} />
+              <div className="absolute -bottom-2 -right-2 bg-white text-black font-mono text-[11px] font-bold px-2.5 py-1.5 border border-zinc-800 uppercase tracking-wider">
                 LVL {user.level}
               </div>
             </div>
+            
+            {/* User Info */}
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter uppercase italic leading-none">{user.fullName}</h2>
-              <p className="font-mono text-[12px] text-zinc-400 font-bold uppercase tracking-[0.25em]">{user.characterClass}</p>
+              <h2 className="text-2xl font-bold tracking-tighter uppercase leading-none">{user.fullName}</h2>
+              <p className="font-mono text-[11px] text-zinc-500 font-bold uppercase tracking-[0.2em]">{user.characterClass}</p>
             </div>
             
+            {/* XP Progress */}
             <div className="space-y-4">
-              <div className="flex justify-between font-mono text-[11px] font-bold text-zinc-500 tracking-widest">
-                <span>XP // PROGRESS</span>
-                <span className="text-black dark:text-white">{user.xp} / 1000</span>
+              <div className="flex justify-between font-mono text-[11px] font-bold text-zinc-600 tracking-widest uppercase">
+                <span>XP Progress</span>
+                <span className="text-white">{user.xp} / 1000</span>
               </div>
-              <div className="h-1.5 bg-zinc-100 dark:bg-zinc-800 w-full">
-                <div className="h-full bg-accent transition-all duration-700 ease-out" style={{ width: `${xpProgress}%` }}></div>
+              <div className="h-1.5 bg-zinc-900 w-full">
+                <div 
+                  className="h-full bg-accent transition-all duration-700 ease-out" 
+                  style={{ width: `${xpProgress}%` }}
+                ></div>
               </div>
-              <p className="text-[11px] font-mono text-zinc-400 italic font-medium">Next synchronization in {1000 - user.xp} XP</p>
+              <p className="text-[11px] font-mono text-zinc-600 italic font-medium">
+                {1000 - user.xp} XP until next level
+              </p>
             </div>
           </div>
 
+          {/* Character Stats */}
           <div className="space-y-8 pt-8">
-            <h4 className="font-mono text-[11px] font-bold text-zinc-400 uppercase tracking-[0.2em] border-b border-zinc-200 dark:border-zinc-800 pb-4">Primary_Stats</h4>
+            <h4 className="font-mono text-[11px] font-bold text-zinc-600 uppercase tracking-[0.2em] border-b border-zinc-800 pb-4">
+              Character Stats
+            </h4>
             <div className="space-y-10">
               {[
                 { label: 'STR', val: user.stats.str, desc: 'Problem Solving' },
@@ -101,111 +123,254 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartAssessment }) => {
               ].map(stat => (
                 <div key={stat.label} className="group">
                   <div className="flex justify-between items-end mb-4">
-                    <span className="font-mono text-[12px] font-bold tracking-widest text-zinc-500">{stat.label}</span>
-                    <span className="font-mono text-xl font-bold italic text-accent">{stat.val}</span>
+                    <span className="font-mono text-[11px] font-bold tracking-widest text-zinc-600 uppercase">
+                      {stat.label}
+                    </span>
+                    <span className="font-mono text-xl font-bold text-accent">
+                      {stat.val}
+                    </span>
                   </div>
-                  <div className="h-0.5 bg-zinc-100 dark:bg-zinc-900 w-full relative">
-                    <div className="h-full bg-black dark:bg-white transition-all duration-1000" style={{ width: `${Math.min(stat.val, 100)}%` }}></div>
+                  <div className="h-0.5 bg-zinc-900 w-full relative">
+                    <div 
+                      className="h-full bg-white transition-all duration-1000" 
+                      style={{ width: `${Math.min(stat.val, 100)}%` }}
+                    ></div>
                   </div>
-                  <p className="text-[10px] font-mono text-zinc-400 mt-2.5 uppercase tracking-widest font-bold opacity-70 group-hover:opacity-100 transition-opacity">{stat.desc}</p>
+                  <p className="text-[10px] font-mono text-zinc-600 mt-2.5 uppercase tracking-widest font-bold">
+                    {stat.desc}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* Navigation Links */}
+          <nav className="space-y-2 pt-8 border-t border-zinc-800">
+            {[
+              { id: 'overview', icon: Home, label: 'Overview' },
+              { id: 'challenges', icon: Target, label: 'Challenges' },
+              { id: 'achievements', icon: Award, label: 'Achievements' },
+              { id: 'settings', icon: Settings, label: 'Settings' },
+            ].map(item => {
+              const Icon = item.icon;
+              const isActive = activeNav === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveNav(item.id)}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 font-mono text-[11px] uppercase font-bold tracking-[0.15em] transition-colors ${
+                    isActive 
+                      ? 'bg-zinc-900 text-white border-l-2 border-accent' 
+                      : 'text-zinc-600 hover:text-white hover:bg-zinc-900/50'
+                  }`}
+                >
+                  <Icon size={16} strokeWidth={1.5} />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </nav>
         </aside>
 
-        {/* MAIN WORKSPACE */}
-        <main className="lg:col-span-9 p-16 space-y-16">
-          {showShop ? (
-            <div className="space-y-12 animate-in fade-in duration-500">
-              <header className="flex justify-between items-end border-b border-zinc-100 dark:border-zinc-900 pb-8">
-                <div className="space-y-3">
-                  <h3 className="text-[12px] font-mono font-bold uppercase tracking-[0.4em] text-accent flex items-center gap-2">
-                    <ShoppingCart size={16} /> Archetype_Market
-                  </h3>
-                  <p className="text-[15px] text-zinc-600 dark:text-zinc-400 font-sans max-w-sm prose-readable leading-relaxed">Enhance your professional parameters through technical asset acquisition.</p>
-                </div>
-              </header>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-200 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800">
-                {SHOP_ITEMS.map(item => (
-                  <div key={item.id} className="bg-white dark:bg-black p-12 flex justify-between items-center group hover:bg-zinc-50 dark:hover:bg-zinc-900/20 transition-colors">
-                    <div className="space-y-4">
-                      <h4 className="font-bold text-lg uppercase tracking-tight">{item.name}</h4>
-                      <p className="text-[12px] font-mono text-zinc-500 uppercase font-bold tracking-widest leading-relaxed">{item.effect}</p>
-                    </div>
-                    <div className="flex items-center gap-8">
-                      <span className="font-mono text-base font-bold text-accent italic">{item.cost} G</span>
-                      <Button variant="outline" size="sm" onClick={() => handlePurchase(item)} className="px-8">ACQUIRE</Button>
-                    </div>
-                  </div>
-                ))}
+        {/* MAIN CONTENT AREA */}
+        <main className="lg:col-span-6 p-12 lg:p-20 space-y-16">
+          
+          {/* Welcome Header */}
+          <header className="space-y-4 pb-12 border-b border-zinc-800">
+            <div className="inline-flex items-center gap-2 px-3 h-7 border border-accent/30 bg-accent/5 font-mono text-[10px] text-accent font-bold uppercase tracking-[0.15em]">
+              <Sparkles size={10} /> Dashboard
+            </div>
+            <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter leading-none uppercase">
+              Welcome back,<br />
+              <span className="text-zinc-700">{user.fullName.split(' ')[0]}</span>
+            </h1>
+            <p className="font-sans text-base text-zinc-500 leading-relaxed max-w-xl">
+              You're making steady progress. Every step forward counts. Your current focus: building confidence through evidence.
+            </p>
+          </header>
+
+          {/* Today's Challenge Card */}
+          <div className="border border-zinc-800 bg-zinc-900/20 p-10 space-y-8 hover:border-zinc-700 transition-colors">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 font-mono text-[11px] uppercase font-bold tracking-[0.15em] text-zinc-500">
+                <Target size={14} strokeWidth={1.5} />
+                Today's Challenge
+              </div>
+              <h2 className="text-2xl font-bold tracking-tight uppercase leading-tight">
+                Debug a React Component
+              </h2>
+              <p className="font-sans text-sm text-zinc-500 leading-relaxed max-w-lg">
+                A user reports that the shopping cart total isn't updating when they change quantities. 
+                Review the code, identify the issue, and implement a fix. This mirrors real development work.
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <button
+                onClick={onStartAssessment}
+                className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] bg-white text-black px-6 h-11 flex items-center hover:opacity-80 transition-opacity"
+              >
+                Start_Challenge <ArrowRight size={14} className="ml-2" />
+              </button>
+              <div className="flex items-center gap-4 font-mono text-[11px] text-zinc-600 uppercase tracking-wider">
+                <span>+50 XP</span>
+                <span className="text-zinc-800">|</span>
+                <span>~15 min</span>
               </div>
             </div>
-          ) : (
-            <div className="space-y-20">
-              <header className="flex justify-between items-end">
-                <div className="space-y-3">
-                  <h3 className="text-[12px] font-mono font-bold uppercase tracking-[0.4em] text-zinc-400">Terminal_Overview</h3>
-                  <p className="text-3xl font-bold tracking-tighter uppercase italic leading-tight">Welcome back, Architect.</p>
-                </div>
-                <Button variant="primary" onClick={onStartAssessment} className="gap-2 px-10 h-12">
-                  Initiate_Diagnostic <Plus size={16} />
-                </Button>
-              </header>
+          </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-                <div className="md:col-span-2 space-y-10">
-                  <h4 className="text-[12px] font-mono font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-900 pb-5">
-                    <TrendingUp size={16} /> Session_History_Logs
-                  </h4>
-                  <div className="border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
-                    <table className="w-full text-left font-mono text-[12px]">
-                      <thead>
-                        <tr className="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 uppercase text-zinc-500">
-                          <th className="p-5 font-bold tracking-widest">Protocol</th>
-                          <th className="p-5 font-bold tracking-widest">Precision</th>
-                          <th className="p-5 font-bold tracking-widest">Yield</th>
-                          <th className="p-5 font-bold tracking-widest">Timestamp</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-zinc-100 dark:divide-zinc-900">
-                        {user.testHistory.length > 0 ? user.testHistory.map(test => (
-                          <tr key={test.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-colors">
-                            <td className="p-5 font-bold uppercase text-zinc-700 dark:text-zinc-300">{test.domain}</td>
-                            <td className="p-5 text-accent font-bold italic text-base">{test.score}/{test.total}</td>
-                            <td className="p-5 text-zinc-500">+{test.xpEarned} XP <span className="mx-2 text-zinc-300 dark:text-zinc-800">|</span> +{test.goldEarned} G</td>
-                            <td className="p-5 text-zinc-400">{new Date(test.date).toLocaleDateString()}</td>
-                          </tr>
-                        )) : (
-                          <tr><td colSpan={4} className="p-20 text-center italic text-zinc-400 text-base">Empty log. Diagnostic engine ready for first sequence.</td></tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <div className="space-y-10">
-                   <h4 className="text-[12px] font-mono font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-900 pb-5">
-                    <Package size={16} /> Asset_Storage
-                  </h4>
-                  <div className="grid grid-cols-1 gap-5">
-                    {user.inventory.length > 0 ? user.inventory.map((id, i) => (
-                      <div key={i} className="p-6 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 font-mono text-[12px] uppercase font-bold tracking-widest flex items-center gap-4">
-                        <div className="w-2 h-2 bg-accent"></div>
-                        {id.replace('_', ' ')}
-                      </div>
-                    )) : (
-                      <div className="p-10 border border-dashed border-zinc-200 dark:border-zinc-800 text-center bg-zinc-50/10">
-                        <p className="text-[12px] font-mono text-zinc-400 italic font-medium leading-relaxed">No technical assets acquired via market protocols.</p>
-                      </div>
-                    )}
-                  </div>
-                  <Button variant="outline" fullWidth size="lg" onClick={() => setShowShop(true)} className="mt-6">BROWSE_MARKET</Button>
-                </div>
+          {/* Progress Cards Row */}
+          <div className="grid grid-cols-2 gap-6">
+            {/* Streak Counter */}
+            <div className="border border-zinc-800 bg-zinc-900/20 p-8 space-y-6 hover:border-zinc-700 transition-colors">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[11px] uppercase font-bold tracking-[0.15em] text-zinc-600">
+                  Current Streak
+                </span>
+                <Flame className="text-white" size={20} strokeWidth={1.5} />
               </div>
+              <div className="space-y-2">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-bold text-white">{streakDays}</span>
+                  <span className="text-lg text-zinc-600 font-mono uppercase tracking-wider">days</span>
+                </div>
+                <p className="text-[11px] font-mono text-zinc-600 uppercase tracking-wider">
+                  Keep the momentum
+                </p>
+              </div>
+            </div>
+
+            {/* Total Challenges */}
+            <div className="border border-zinc-800 bg-zinc-900/20 p-8 space-y-6 hover:border-zinc-700 transition-colors">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[11px] uppercase font-bold tracking-[0.15em] text-zinc-600">
+                  Challenges
+                </span>
+                <TrendingUp className="text-white" size={20} strokeWidth={1.5} />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-bold text-white">{user.totalTests}</span>
+                  <span className="text-lg text-zinc-600 font-mono uppercase tracking-wider">done</span>
+                </div>
+                <p className="text-[11px] font-mono text-zinc-600 uppercase tracking-wider">
+                  Evidence building
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Recent Activity */}
+          <div className="space-y-6">
+            <h3 className="font-mono text-[11px] font-bold text-zinc-600 uppercase tracking-[0.2em] flex items-center gap-2 border-b border-zinc-800 pb-5">
+              <TrendingUp size={14} /> Recent Activity
+            </h3>
+            <div className="border border-zinc-800 overflow-hidden">
+              {recentActivities.length > 0 ? (
+                <div className="divide-y divide-zinc-800">
+                  {recentActivities.map(activity => (
+                    <div 
+                      key={activity.id} 
+                      className="p-6 flex items-center justify-between hover:bg-zinc-900/30 transition-colors"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 border border-zinc-800 bg-zinc-900 flex items-center justify-center">
+                          <Target size={18} className="text-white" strokeWidth={1.5} />
+                        </div>
+                        <div>
+                          <p className="font-mono text-[11px] font-bold text-white mb-1 uppercase tracking-wider">
+                            {activity.domain}
+                          </p>
+                          <p className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">
+                            {new Date(activity.date).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-mono text-sm font-bold text-accent mb-1">+{activity.xpEarned} XP</p>
+                        <p className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">
+                          {activity.score}/{activity.total} correct
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-16 text-center">
+                  <p className="font-mono text-[11px] text-zinc-600 uppercase tracking-wider mb-2">
+                    No Activity Yet
+                  </p>
+                  <p className="text-[10px] font-mono text-zinc-700 uppercase tracking-widest">
+                    Start your first challenge
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </main>
+
+        {/* RIGHT SIDEBAR */}
+        <aside className="lg:col-span-3 border-l border-zinc-800 p-12 space-y-10 bg-zinc-900/10">
+          
+          {/* Weekly Leaderboard */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-2 font-mono text-[11px] uppercase font-bold tracking-[0.15em] text-zinc-600 border-b border-zinc-800 pb-4">
+              <Trophy size={14} strokeWidth={1.5} />
+              This Week
+            </div>
+            <div className="space-y-4">
+              {weeklyLeaders.map((leader, idx) => (
+                <div key={idx} className="flex items-center justify-between p-4 border border-zinc-800 bg-zinc-900/20 hover:bg-zinc-900/40 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 border border-zinc-800 bg-zinc-900 flex items-center justify-center font-mono text-[10px] text-zinc-600 font-bold">
+                      {idx + 1}
+                    </div>
+                    <div>
+                      <p className="font-mono text-[10px] font-bold text-white uppercase tracking-wider truncate">
+                        {leader.name}
+                      </p>
+                      <p className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest">
+                        {leader.xp} XP
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Daily Reminder */}
+          <div className="border border-zinc-800 bg-zinc-900/20 p-6 space-y-4">
+            <div className="flex items-center gap-2 font-mono text-[11px] uppercase font-bold tracking-[0.15em] text-zinc-600">
+              <Lightbulb size={14} strokeWidth={1.5} />
+              Daily Tip
+            </div>
+            <p className="font-sans text-xs text-zinc-500 leading-relaxed">
+              {dailyTip}
+            </p>
+          </div>
+
+          {/* Upgrade Section */}
+          {!user.isPro && (
+            <div className="border border-zinc-800 bg-zinc-900/20 p-6 space-y-4 hover:border-zinc-700 transition-colors">
+              <div className="flex items-center gap-2 font-mono text-[11px] uppercase font-bold tracking-[0.15em] text-white">
+                <Sparkles size={14} strokeWidth={1.5} />
+                Upgrade
+              </div>
+              <p className="font-sans text-xs text-zinc-500 leading-relaxed">
+                Unlock advanced scenarios, personalized paths, and detailed analytics.
+              </p>
+              <button className="w-full font-mono text-[11px] font-bold uppercase tracking-[0.1em] border border-zinc-700 text-zinc-500 px-4 h-9 flex items-center justify-center hover:text-white hover:border-zinc-500 transition-colors">
+                Explore_Pro
+              </button>
             </div>
           )}
-        </main>
+        </aside>
       </div>
     </div>
   );

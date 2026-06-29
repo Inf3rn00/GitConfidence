@@ -24,12 +24,12 @@ export const HOW_IT_WORKS_STEPS = [
 ];
 
 export const PROGRESSION_STEPS = [
-  { icon: 'Code2', label: 'Solve a Problem', color: 'text-accent' },
-  { icon: 'Zap', label: 'Earn XP & Gold', color: 'text-yellow-500' },
-  { icon: 'Repeat', label: 'Level Up Your Class', color: 'text-green-500' },
-  { icon: 'Sparkles', label: 'Avatar Evolves', color: 'text-purple-500' },
-  { icon: 'Route', label: 'Harder Problems Unlock', color: 'text-orange-500' },
-  { icon: 'ArrowRight', label: 'Repeat → Confidence Compounds', color: 'text-accent' },
+  { icon: 'Code2', label: 'Solve a Problem', color: 'text-white' },
+  { icon: 'Zap', label: 'Earn XP & Gold', color: 'text-white' },
+  { icon: 'Repeat', label: 'Level Up Your Class', color: 'text-white' },
+  { icon: 'Sparkles', label: 'Avatar Evolves', color: 'text-white' },
+  { icon: 'Route', label: 'Harder Problems Unlock', color: 'text-white' },
+  { icon: 'ArrowRight', label: 'Repeat → Confidence Compounds', color: 'text-white' },
 ];
 
 export const FEARS = [

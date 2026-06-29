@@ -34,7 +34,7 @@ export const HowItWorks: React.FC = () => {
               {...staggerItem(i)}
               className="p-10 lg:p-12 bg-black group hover:bg-zinc-50 dark:hover:bg-zinc-900/30 transition-colors"
             >
-              <Icon name={item.icon} size={28} className="text-accent mb-6 group-hover:scale-110 transition-transform" />
+              <Icon name={item.icon} size={28} className="text-white mb-6 group-hover:scale-110 transition-transform" />
               <div className="font-mono text-[11px] text-zinc-400 mb-4 font-bold tracking-[0.2em]">{item.step}</div>
               <h3 className="font-bold text-lg mb-3 tracking-tighter uppercase">{item.title}</h3>
               <p className="text-[14px] text-zinc-400 leading-relaxed">{item.desc}</p>

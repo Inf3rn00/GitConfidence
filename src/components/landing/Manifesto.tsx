@@ -33,7 +33,7 @@ export const Manifesto: React.FC = () => {
           className="grid md:grid-cols-2 gap-20 text-zinc-300 font-sans text-xl"
         >
           <p className="max-w-md opacity-80 hover:opacity-100 transition-opacity duration-500 leading-relaxed">
-            Imposter syndrome isn't an emotional flaw—it's an information
+            Imposter syndrome isn't an emotional flaw, it's an information
             asymmetry. When you lack clear, objective data on your technical
             capabilities, your mind fills the void with insecurity.
           </p>

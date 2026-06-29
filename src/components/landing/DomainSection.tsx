@@ -38,7 +38,7 @@ export const DomainSection: React.FC = () => {
               {...staggerItem(i)}
               className="p-10 lg:p-12 bg-black group hover:bg-zinc-50 dark:hover:bg-zinc-900/30 transition-colors"
             >
-              <Icon name={cat.icon} size={24} className="text-accent mb-4 group-hover:scale-110 transition-transform" />
+              <Icon name={cat.icon} size={24} className="text-white mb-4 group-hover:scale-110 transition-transform" />
               <h3 className="font-bold text-base tracking-tighter uppercase">{cat.label}</h3>
             </motion.div>
           ))}

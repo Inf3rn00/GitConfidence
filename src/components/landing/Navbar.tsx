@@ -23,7 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrolled, scrollTo }) => {
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12 h-16 flex items-center justify-between">
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="font-mono font-bold text-sm tracking-tighter italic hover:text-accent transition-colors"
+          className="font-mono font-bold text-sm tracking-tighter italic hover:text-white transition-colors"
         >
            GitConfidence 
         </button>

@@ -38,7 +38,7 @@ export const ClassesSection: React.FC = () => {
               {...staggerItem(i)}
               className="p-10 lg:p-12 bg-black group hover:bg-zinc-50 dark:hover:bg-zinc-900/30 transition-colors"
             >
-              <Icon name={cls.icon} size={32} className="text-accent mb-6 group-hover:scale-110 transition-transform" />
+              <Icon name={cls.icon} size={32} className="text-white mb-6 group-hover:scale-110 transition-transform" />
               <h3 className="text-2xl font-bold tracking-tighter uppercase italic mb-2">{cls.name}</h3>
               <p className="text-[13px] text-zinc-500 dark:text-zinc-400 font-sans leading-relaxed mb-6">
                 {cls.tagline}

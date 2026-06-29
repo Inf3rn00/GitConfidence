@@ -24,7 +24,7 @@ export const Hero: React.FC<HeroProps> = ({ scrollTo }) => {
             transition={{ duration: 0.7, ease: 'easeOut' }}
             className="space-y-8"
           >
-            <div className="inline-flex items-center gap-2 px-3 h-7 border border-accent/30 bg-accent/5 font-mono text-[10px] text-accent font-bold uppercase tracking-[0.15em]">
+            <div className="inline-flex items-center gap-2 px-3 h-7 border border-zinc-700 bg-zinc-900/20 font-mono text-[10px] text-white font-bold uppercase tracking-[0.15em]">
               <Cpu size={10} /> For Frontend Developers
             </div>
             <h1 className="text-6xl lg:text-8xl font-bold tracking-tighter leading-none uppercase">
