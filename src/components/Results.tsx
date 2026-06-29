@@ -40,7 +40,7 @@ export const Results: React.FC<ResultsProps> = ({ result, isPro, onReturn, onUpg
   const COLORS = ['#000000', '#0066FF', '#71717A', '#27272A', '#09090B'];
 
   const handleShare = () => {
-    const text = `Diagnostic Complete: ${result.score}/${result.total} precision at DevSkill. Domain: Senior Warrior.`;
+    const text = `Diagnostic Complete: ${result.score}/${result.total} precision at GitConfidence.`;
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`);
   };
 
@@ -48,7 +48,7 @@ export const Results: React.FC<ResultsProps> = ({ result, isPro, onReturn, onUpg
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white font-sans selection:bg-accent selection:text-white pb-24">
       {/* HUD HEADER */}
       <nav className="h-16 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-8 mb-12">
-        <div className="font-mono font-bold text-sm italic tracking-tighter">DEVSKILL // ANALYSIS_REPORT</div>
+        <div className="font-mono font-bold text-sm italic tracking-tighter">GITCONFIDENCE // ANALYSIS_REPORT</div>
         <Button variant="ghost" size="sm" onClick={onReturn} className="gap-2"><ArrowLeft size={14}/> Back_to_Hub</Button>
       </nav>
 

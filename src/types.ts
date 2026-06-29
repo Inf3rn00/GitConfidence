@@ -1,15 +1,14 @@
-
 export type Domain = 'Frontend' | 'Backend' | 'Fullstack' | 'DevOps' | 'Mobile' | 'Data' | 'Database';
 export type Stack = Domain;
 export type Category = 'algorithms' | 'react' | 'async' | 'apis' | 'testing';
 export type SkillLevel = 'Beginner' | 'Intermediate' | 'Senior' | 'Junior';
 
-export type CharacterClass = 'CyberSmith' | 'NeonNinja' | 'QuantumMage' | 'ByteBerserker' | 'CircuitSorcerer' | 'DataDruid';
+export type CharacterClass = 'UIWarrior' | 'LogicMage' | 'Debugger';
 
 export interface CharacterStats {
-  str: number; // Problem Solving
-  int: number; // Theory
-  dex: number; // Speed
+  str: number;
+  int: number;
+  dex: number;
 }
 
 export interface InventoryItem {
@@ -35,7 +34,10 @@ export interface User {
   testHistory: TestAttempt[];
   characterClass: CharacterClass;
   stats: CharacterStats;
-  inventory: string[]; // IDs of items owned
+  inventory: string[];
+  avatarName: string;
+  biggestFear: string;
+  goalToBuild: string;
 }
 
 export interface TestAttempt {

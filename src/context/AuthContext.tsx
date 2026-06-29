@@ -1,12 +1,26 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, Domain, SkillLevel, TestAttempt, CharacterClass, CharacterStats } from '../../types';
+import { User, Domain, SkillLevel, TestAttempt, CharacterClass, CharacterStats } from '../types';
 
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
-  login: (data: { fullName: string; email: string; domain: Domain; level: SkillLevel }) => Promise<void>;
-  initializeCharacter: (charClass: CharacterClass) => void;
+  register: (data: { fullName: string; email: string; domain: Domain; level: SkillLevel }) => void;
+  completeOnboarding: (data: {
+    characterClass: CharacterClass;
+    avatarName: string;
+    biggestFear: string;
+    goalToBuild: string;
+  }) => void;
+  createUser: (data: {
+    fullName: string;
+    email: string;
+    domain: Domain;
+    level: SkillLevel;
+    characterClass: CharacterClass;
+    avatarName: string;
+    biggestFear: string;
+    goalToBuild: string;
+  }) => void;
   updateUser: (data: Partial<User>) => void;
   addTestResult: (score: number, total: number) => void;
   purchaseItem: (itemId: string, cost: number, bonus?: Partial<CharacterStats>) => boolean;
@@ -15,12 +29,9 @@ interface AuthContextType {
 }
 
 const INITIAL_STATS: Record<CharacterClass, CharacterStats> = {
-  CyberSmith: { str: 60, int: 40, dex: 50 },
-  NeonNinja: { str: 40, int: 70, dex: 80 },
-  QuantumMage: { str: 30, int: 90, dex: 40 },
-  ByteBerserker: { str: 80, int: 50, dex: 60 },
-  CircuitSorcerer: { str: 50, int: 60, dex: 70 },
-  DataDruid: { str: 40, int: 80, dex: 50 },
+  UIWarrior: { str: 50, int: 40, dex: 80 },
+  LogicMage: { str: 40, int: 90, dex: 40 },
+  Debugger: { str: 80, int: 50, dex: 50 },
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,56 +41,100 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('devskill_user');
+    const stored = localStorage.getItem('gitconfidence_user');
     if (stored) {
       setUser(JSON.parse(stored));
     }
     setIsLoading(false);
   }, []);
 
-  const login = async (data: { fullName: string; email: string; domain: Domain; level: SkillLevel }) => {
-    setIsLoading(true);
+  const register = (data: { fullName: string; email: string; domain: Domain; level: SkillLevel }) => {
     const baseUser: any = {
       id: Math.random().toString(36).substr(2, 9),
+      fullName: data.fullName,
+      email: data.email,
+      domain: data.domain,
+      skillLevel: data.level,
+      level: 1,
       isPro: false,
       bestScore: 0,
       totalTests: 0,
       testHistory: [],
       xp: 0,
       gold: 10,
-      level: 1,
-      skillLevel: data.level,
-      ...data
+      avatarName: '',
+      biggestFear: '',
+      goalToBuild: '',
     };
     setUser(baseUser);
-    localStorage.setItem('devskill_user', JSON.stringify(baseUser));
-    setIsLoading(false);
+    localStorage.setItem('gitconfidence_user', JSON.stringify(baseUser));
   };
 
-  const initializeCharacter = (charClass: CharacterClass) => {
+  const completeOnboarding = (data: {
+    characterClass: CharacterClass;
+    avatarName: string;
+    biggestFear: string;
+    goalToBuild: string;
+  }) => {
     if (!user) return;
     const updatedUser = {
       ...user,
-      characterClass: charClass,
-      stats: INITIAL_STATS[charClass],
+      avatarName: data.avatarName,
+      characterClass: data.characterClass,
+      biggestFear: data.biggestFear,
+      goalToBuild: data.goalToBuild,
+      stats: INITIAL_STATS[data.characterClass],
       inventory: [],
     };
     setUser(updatedUser);
-    localStorage.setItem('devskill_user', JSON.stringify(updatedUser));
+    localStorage.setItem('gitconfidence_user', JSON.stringify(updatedUser));
+  };
+
+  const createUser = (data: {
+    fullName: string;
+    email: string;
+    domain: Domain;
+    level: SkillLevel;
+    characterClass: CharacterClass;
+    avatarName: string;
+    biggestFear: string;
+    goalToBuild: string;
+  }) => {
+    const newUser: User = {
+      id: Math.random().toString(36).substr(2, 9),
+      fullName: data.fullName,
+      email: data.email,
+      domain: data.domain,
+      skillLevel: data.level,
+      level: 1,
+      isPro: false,
+      bestScore: 0,
+      totalTests: 0,
+      testHistory: [],
+      xp: 0,
+      gold: 10,
+      avatarName: data.avatarName,
+      characterClass: data.characterClass,
+      biggestFear: data.biggestFear,
+      goalToBuild: data.goalToBuild,
+      stats: INITIAL_STATS[data.characterClass],
+      inventory: [],
+    };
+    setUser(newUser);
+    localStorage.setItem('gitconfidence_user', JSON.stringify(newUser));
   };
 
   const addTestResult = (score: number, total: number) => {
     if (!user) return;
-    
+
     const percentage = score / total;
     const xpEarned = Math.round(50 + (percentage * 150));
     const goldEarned = percentage >= 0.8 ? 20 : 5;
-    
+
     let newXp = user.xp + xpEarned;
     let newLevel = user.level;
     let newStats = { ...user.stats };
 
-    // Level up logic (every 1000 XP)
     if (newXp >= 1000) {
       newLevel += Math.floor(newXp / 1000);
       newXp = newXp % 1000;
@@ -95,7 +150,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       date: new Date().toISOString(),
       domain: user.domain,
       xpEarned,
-      goldEarned
+      goldEarned,
     };
 
     const updated = {
@@ -106,16 +161,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       gold: user.gold + goldEarned,
       bestScore: Math.max(user.bestScore, score),
       totalTests: user.totalTests + 1,
-      testHistory: [newAttempt, ...user.testHistory]
+      testHistory: [newAttempt, ...user.testHistory],
     };
-    
+
     setUser(updated);
-    localStorage.setItem('devskill_user', JSON.stringify(updated));
+    localStorage.setItem('gitconfidence_user', JSON.stringify(updated));
   };
 
   const purchaseItem = (itemId: string, cost: number, bonus?: Partial<CharacterStats>): boolean => {
     if (!user || user.gold < cost) return false;
-    
+
     const newStats = { ...user.stats };
     if (bonus) {
       if (bonus.str) newStats.str += bonus.str;
@@ -127,11 +182,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       ...user,
       gold: user.gold - cost,
       stats: newStats,
-      inventory: [...user.inventory, itemId]
+      inventory: [...user.inventory, itemId],
     };
 
     setUser(updated);
-    localStorage.setItem('devskill_user', JSON.stringify(updated));
+    localStorage.setItem('gitconfidence_user', JSON.stringify(updated));
     return true;
   };
 
@@ -139,7 +194,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) return;
     const updated = { ...user, ...data };
     setUser(updated);
-    localStorage.setItem('devskill_user', JSON.stringify(updated));
+    localStorage.setItem('gitconfidence_user', JSON.stringify(updated));
   };
 
   const upgradePro = () => {
@@ -149,21 +204,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('devskill_user');
+    localStorage.removeItem('gitconfidence_user');
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      isLoading, 
-      login, 
-      initializeCharacter,
-      updateUser, 
-      addTestResult, 
-      purchaseItem,
-      upgradePro, 
-      logout 
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoading,
+        register,
+        completeOnboarding,
+        createUser,
+        updateUser,
+        addTestResult,
+        purchaseItem,
+        upgradePro,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

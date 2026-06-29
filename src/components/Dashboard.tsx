@@ -11,17 +11,14 @@ import {
   TrendingUp,
   Package,
   ShoppingCart,
-  Hammer, Zap, Wand2, Axe, CircleDot, BookOpen
+  Palette, Binary, BugPlay
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 const CLASS_ICONS: Record<string, any> = {
-  CyberSmith: Hammer,
-  NeonNinja: Zap,
-  QuantumMage: Wand2,
-  ByteBerserker: Axe,
-  CircuitSorcerer: CircleDot,
-  DataDruid: BookOpen
+  UIWarrior: Palette,
+  LogicMage: Binary,
+  Debugger: BugPlay
 };
 
 const SHOP_ITEMS = [
@@ -56,7 +53,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartAssessment }) => {
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white font-sans selection:bg-accent">
       <nav className="h-16 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-8 sticky top-0 bg-white/80 dark:bg-black/80 backdrop-blur-md z-50">
         <div className="flex items-center gap-8">
-          <div className="font-mono font-bold text-base italic tracking-tighter">DEVSKILL // HUB</div>
+          <div className="font-mono font-bold text-base italic tracking-tighter">GITCONFIDENCE // HUB</div>
           <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800"></div>
           <div className="flex gap-10 font-mono text-[11px] uppercase font-bold text-zinc-400 tracking-[0.2em]">
             <button className={`${!showShop ? 'text-black dark:text-white' : 'hover:text-black dark:hover:text-white transition-colors'}`} onClick={() => setShowShop(false)}>Overview</button>
@@ -96,7 +93,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartAssessment }) => {
               <div className="h-1.5 bg-zinc-100 dark:bg-zinc-800 w-full">
                 <div className="h-full bg-accent transition-all duration-700 ease-out" style={{ width: `${xpProgress}%` }}></div>
               </div>
-              <p className="text-[11px] font-mono text-zinc-400 italic font-medium">Next synchronization in {1000 - user.xp} XP 🔥</p>
+              <p className="text-[11px] font-mono text-zinc-400 italic font-medium">Next synchronization in {1000 - user.xp} XP</p>
             </div>
           </div>
 

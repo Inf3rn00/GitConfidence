@@ -1,42 +1,31 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeProvider';
 import { LandingPage } from './components/LandingPage';
+import { OnboardingFlow } from './components/OnboardingFlow';
 import { Dashboard } from './components/Dashboard';
 import { Quiz } from './components/Quiz';
 import { Results } from './components/Results';
-import { CharacterSelection } from './components/CharacterSelection';
 import { questions } from './data/questions';
-import { QuizResult, CharacterClass } from './types';
+import { QuizResult } from './types';
 
-type View = 'landing' | 'auth' | 'character_select' | 'dashboard' | 'quiz' | 'results';
+const LoadingScreen: React.FC = () => (
+  <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center font-mono">
+    <div className="space-y-4 text-center">
+      <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin mx-auto" />
+      <p className="text-zinc-500 uppercase tracking-widest text-[10px]">
+        Synchronizing_Protocol...
+      </p>
+    </div>
+  </div>
+);
 
 const AppContent: React.FC = () => {
-  const { user, isLoading, login, initializeCharacter, addTestResult, upgradePro } = useAuth();
-  const [view, setView] = useState<View>('landing');
+  const { user, isLoading, upgradePro, addTestResult } = useAuth();
+  const navigate = useNavigate();
   const [lastResult, setLastResult] = useState<QuizResult | null>(null);
 
-  useEffect(() => {
-    if (!isLoading) {
-      if (user) {
-        if (!user.characterClass) {
-          setView('character_select');
-        } else if (view === 'landing' || view === 'character_select') {
-          setView('dashboard');
-        }
-      } else {
-        setView('landing');
-      }
-    }
-  }, [user, isLoading, view]);
-
-  const handleStartQuiz = () => setView('quiz');
-
-  const handleCharacterSelect = (charClass: CharacterClass) => {
-    initializeCharacter(charClass);
-    setView('dashboard');
-  };
+  if (isLoading) return <LoadingScreen />;
 
   const handleQuizSubmit = (answers: Record<string, string>) => {
     const score = questions.reduce((acc, q) => {
@@ -51,67 +40,76 @@ const AppContent: React.FC = () => {
         react: 60 + Math.floor(Math.random() * 40),
         async: 40 + Math.floor(Math.random() * 60),
         apis: 80 + Math.floor(Math.random() * 20),
-        testing: 50 + Math.floor(Math.random() * 50)
-      }
+        testing: 50 + Math.floor(Math.random() * 50),
+      },
     };
 
     setLastResult(result);
     addTestResult(score, questions.length);
-    setView('results');
+    navigate('/results');
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center font-mono">
-        <div className="space-y-4 text-center">
-          <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin mx-auto" />
-          <p className="text-zinc-500 uppercase tracking-widest text-[10px]">Synchronizing_Protocol...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="antialiased">
-      {view === 'landing' && (
-        <LandingPage onStart={login} />
-      )}
-
-      {view === 'character_select' && (
-        <CharacterSelection onSelect={handleCharacterSelect} />
-      )}
-
-      {view === 'dashboard' && (
-        <Dashboard onStartAssessment={handleStartQuiz} />
-      )}
-      
-      {view === 'quiz' && (
-        <Quiz
-          questions={questions}
-          onSubmit={handleQuizSubmit}
-          onExit={() => setView('dashboard')}
-        />
-      )}
-
-      {view === 'results' && lastResult && (
-        <Results 
-          result={lastResult} 
-          isPro={user?.isPro || false}
-          onReturn={() => setView('dashboard')}
-          onUpgrade={upgradePro}
-        />
-      )}
-    </div>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          user?.characterClass ? <Navigate to="/dashboard" replace /> : <LandingPage />
+        }
+      />
+      <Route
+        path="/onboarding"
+        element={
+          !user ? <Navigate to="/" replace /> :
+          user.characterClass ? <Navigate to="/dashboard" replace /> :
+          <OnboardingFlow />
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          !user?.characterClass ? <Navigate to="/" replace /> :
+          <Dashboard onStartAssessment={() => navigate('/quiz')} />
+        }
+      />
+      <Route
+        path="/quiz"
+        element={
+          !user?.characterClass ? <Navigate to="/" replace /> :
+          <Quiz
+            questions={questions}
+            onSubmit={handleQuizSubmit}
+            onExit={() => navigate('/dashboard')}
+          />
+        }
+      />
+      <Route
+        path="/results"
+        element={
+          !lastResult ? <Navigate to="/dashboard" replace /> :
+          <Results
+            result={lastResult}
+            isPro={user?.isPro || false}
+            onReturn={() => {
+              setLastResult(null);
+              navigate('/dashboard');
+            }}
+            onUpgrade={upgradePro}
+          />
+        }
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 };
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider>
+    <BrowserRouter>
       <AuthProvider>
         <AppContent />
       </AuthProvider>
-    </ThemeProvider>
+    </BrowserRouter>
   );
 };
 

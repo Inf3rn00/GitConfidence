@@ -1,7 +1,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { questions } from '../data/questions';
-import { QuizState, QuizResult, CategoryResult, Category, Stack } from '../../types';
+import { QuizState, QuizResult, CategoryResult, Category, Stack } from '../types';
 
 export const useQuiz = (userStack: Stack) => {
   const [filteredQuestions, setFilteredQuestions] = useState(questions);
